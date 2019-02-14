@@ -74,7 +74,7 @@ This will create an admin user `admin`, and also create the OAuth client used by
 The CLI needs to be logged on in order to create gateways, devices or API keys. You can use the following commands in a separate console session to login:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli login
+$ ttn-lw-cli login
 ```
 
 A link will be provided to the OAuth login page where you can login using the credentials from the step ahead.
@@ -86,7 +86,7 @@ A link will be provided to the OAuth login page where you can login using the cr
 By default, the stack allows unregistered gateways to connect, but without providing a default band. As such, it is highly recommended that each gateway is registered:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli gateway create gtw1 --user-id admin --frequency_plan_id EU_863_870 --gateway-eui 00800000A00009EF
+$ ttn-lw-cli gateway create gtw1 --user-id admin --frequency_plan_id EU_863_870 --gateway-eui 00800000A00009EF
 ```
 
 This creates a gateway `gtw1` with the frequency plan `EU_863_870` and EUI `00800000A00009EF`. You can now connect 
@@ -99,7 +99,7 @@ your gateway to the stack. For more details you can use the `--help` flag.
 In order to register a device, the controlling application of the said device must be registered first:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app create app1 --user-id admin
+$ ttn-lw-cli app create app1 --user-id admin
 ```
 
 This creates an application `app1` for the user `admin`.
@@ -111,7 +111,7 @@ This creates an application `app1` for the user `admin`.
 You can now register an OTAA activated device to be used with the stack as follows:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli end-devices create --device-id dev1 --dev-eui 0004A30B001C0530 --join-eui 800000000000000C --application-id app1 --frequency_plan_id EU_863_870 --root_keys.app_key.key 752BAEC23EAE7964AF27C325F4C23C9A --lorawan_phy_version 1.0.2-b --lorawan_version 1.0.2
+$ ttn-lw-cli end-devices create --device-id dev1 --dev-eui 0004A30B001C0530 --join-eui 800000000000000C --application-id app1 --frequency_plan_id EU_863_870 --root_keys.app_key.key 752BAEC23EAE7964AF27C325F4C23C9A --lorawan_phy_version 1.0.2-b --lorawan_version 1.0.2
 ```
 
 This will create an LoRa 1.0.2 end-device `dev1` with DevEUI `0004A30B001C0530`, AppEUI `800000000000000C` and AppKey
@@ -125,7 +125,7 @@ If you wish to enable class C support for this device, you can add the `--suppor
 In order to send uplinks and receive downlinks from your device, you must first link the application server to the network server of the private network. In order to achieve this, first create an API key:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app api-keys create --application-id app1 --right-application-link
+$ ttn-lw-cli app api-keys create --application-id app1 --right-application-link
 ```
 
 The CLI will return an API key such as `NNSXS.VEEBURF3KR77ZRUF5JGCFIJQ4FLH5ELQXGR2SQQ.EKMEIDASX5EZTGOPDCZXGAXEHMD4FD2NAYTJERPD55VV3WAXADZQ`.
@@ -134,7 +134,7 @@ This API key has only linking rights, and should be used only during the linking
 You can now link the application server to the network server:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app link set app1 --api-key [...]
+$ ttn-lw-cli app link set app1 --api-key [...]
 ```
 
 Your application is now linked, and can use the built-in MQTT broker and Webhooks support.
@@ -146,7 +146,7 @@ Your application is now linked, and can use the built-in MQTT broker and Webhook
 In order to use the MQTT broker it is necessary to register a new API key that will be used during the authentication process:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app api-keys create --application-id app1 --right-application-traffic-down-write --right-application-traffic-read
+$ ttn-lw-cli app api-keys create --application-id app1 --right-application-traffic-down-write --right-application-traffic-read
 ```
 
 Note that this new API key has full rights and can both receive uplinks and schedule downlinks. You can now login using an MQTT client using the username `app1` (the application name) and the newly generated API key as password.
@@ -282,7 +282,7 @@ Once the downlink has been acknowledged, a message is published to the topic `v3
 The WebHooks feature allows the application server to send application related messages to specific HTTP(S) endpoints. Creating a WebHook requires you to have an endpoint available as a message sink.
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app webhook set --application-id app1 --webhook-id wh1 --base-url https://example.com/lorahooks --join-accept.path "join" --format "json"
+$ ttn-lw-cli app webhook set --application-id app1 --webhook-id wh1 --base-url https://example.com/lorahooks --join-accept.path "join" --format "json"
 ```
 
 This will create an WebHook `wh1` for the application `app1` with a base URL `https://example.com/lorahooks` and a join path `join`. When a device of the application `app1` joins the network, the application server will do a `POST` request on the endpoint `https://example.com/lorahooks/join` with the following body:
@@ -308,7 +308,7 @@ This will create an WebHook `wh1` for the application `app1` with a base URL `ht
 You can later on subscribe for other messages, such as uplinks, using the following command:
 
 ```bash
-$ docker-compose exec stack ttn-lw-cli app webhook set --application-id app1 --webhook-id wh1 --uplink-message.path "up"
+$ ttn-lw-cli app webhook set --application-id app1 --webhook-id wh1 --uplink-message.path "up"
 ```
 
 Now when the device sends an uplink, the application server will do a `POST` request to `https://example.com/lorahooks/up` with the following body:
