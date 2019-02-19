@@ -23,6 +23,23 @@ In this guide we will get everything up and running on your local machine (on `l
 
 ## Dependencies 
 
+### CLI and Stack
+
+For **stable** versions, see the [Releases](https://github.com/TheThingsNetwork/lorawan-stack/releases) page on Github.
+
+For the latest **master**, you can download pre-compiled binaries:
+
+| **File Name** | **Operating System** | **Architecture** |
+| ------------- | -------------------- | ---------------- |
+| [lorawan-stack-darwin-amd64.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-darwin-amd64.tar.gz) | macOS | amd64 |
+| [lorawan-stack-linux-amd64.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-linux-amd64.tar.gz) | linux | amd64 |
+| [lorawan-stack-linux-386.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-linux-386.tar.gz) | linux | 386 |
+| [lorawan-stack-linux-armv6.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-linux-armv6.tar.gz) | linux | armv6 |
+| [lorawan-stack-linux-armv7.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-linux-armv7.tar.gz) | linux | armv7 |
+| [lorawan-stack-linux-arm64.tar.gz](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-linux-arm64.tar.gz) | linux | arm64 |
+| [lorawan-stack-windows-amd64.zip](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-windows-amd64.zip) | windows | amd64 |
+| [lorawan-stack-windows-386.zip](https://ttnreleases.blob.core.windows.net/release/master/lorawan-stack-windows-386.zip) | windows | 386 |
+
 ### Certificates
 
 By default, the Stack requires a `cert.pem` and `key.pem`, in order to to serve content over TLS.
