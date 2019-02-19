@@ -2,7 +2,7 @@ FROM alpine:3.8
 
 RUN addgroup -g 886 thethings && adduser -u 886 -S -G thethings thethings
 
-RUN apk --update --no-cache add ca-certificates
+RUN apk --update --no-cache add ca-certificates curl
 
 COPY ttn-lw-stack /bin/ttn-lw-stack
 RUN ln -s /bin/ttn-lw-stack /bin/stack
@@ -19,6 +19,8 @@ EXPOSE 1700/udp 1882 8882 1883 8883 1884 8884 1885 8885
 RUN mkdir /srv/ttn-lorawan/public/blob
 
 VOLUME ["/srv/ttn-lorawan/public/blob"]
+
+HEALTHCHECK --interval=1m --timeout=5s CMD curl -f http://localhost:1885/health/live || exit 1
 
 ENV TTN_LW_BLOB_LOCAL_DIRECTORY=/srv/ttn-lorawan/public/blob \
     TTN_LW_IS_DATABASE_URI=postgres://root@cockroach:26257/ttn_lorawan?sslmode=disable \
