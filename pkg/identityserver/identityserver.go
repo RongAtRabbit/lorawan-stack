@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/heptiolabs/healthcheck"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // Postgres database driver.
 	"go.thethings.network/lorawan-stack/pkg/auth/rights"
@@ -160,6 +161,17 @@ func New(c *component.Component, config *Config) (is *IdentityServer, err error)
 		hooks.RegisterUnaryHook("/ttn.lorawan.v3.UserAccess", hook.name, hook.middleware)
 	}
 	hooks.RegisterUnaryHook("/ttn.lorawan.v3.EntityAccess", cluster.HookName, c.ClusterAuthUnaryHook())
+
+	for _, check := range []struct {
+		name  string
+		check healthcheck.Check
+	}{
+		{"is-ping-database", func() error { return is.db.DB().Ping() }},
+		{"is-ping-redis", func() error { return is.redis.Ping().Err() }},
+	} {
+		c.RegisterReadinessCheck(check.name, check.check)
+		c.RegisterLivenessCheck(check.name, check.check)
+	}
 
 	c.RegisterGRPC(is)
 	c.RegisterWeb(is.oauth)
