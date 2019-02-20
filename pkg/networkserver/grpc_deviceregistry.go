@@ -215,6 +215,13 @@ func (ns *NetworkServer) Set(ctx context.Context, req *ttnpb.SetEndDeviceRequest
 		}
 
 		if req.Device.SupportsJoin {
+			if req.Device.EndDeviceIdentifiers.JoinEUI == nil {
+				return nil, nil, errNoJoinEUI
+			}
+			if req.Device.EndDeviceIdentifiers.DevEUI == nil {
+				return nil, nil, errNoDevEUI
+			}
+
 			var hasSession bool
 			for _, p := range sets {
 				if p == "session" || strings.HasPrefix(p, "session.") {
